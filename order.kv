@@ -1,0 +1,69 @@
+<ClienteForm>:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+
+    Label:
+        text: 'Nome do Cliente:'
+    TextInput:
+        text: root.nome
+        on_text: root.nome = self.text
+
+    Label:
+        text: 'Morada:'
+    TextInput:
+        text: root.morada
+        on_text: root.morada = self.text
+
+    Label:
+        text: 'Telefone:'
+    TextInput:
+        text: root.telefone
+        on_text: root.telefone = self.text
+
+    Button:
+        text: 'Registrar Cliente'
+        on_press: root.submit_cliente()
+
+<PedidoForm>:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+
+    Label:
+        text: 'Nome do Hambúrguer:'
+    TextInput:
+        text: root.nome_hamburguer
+        on_text: root.nome_hamburguer = self.text
+
+    Label:
+        text: 'Quantidade:'
+    TextInput:
+        text: str(root.quantidade)
+        input_filter: 'int'
+        on_text: root.quantidade = int(self.text) if self.text.isdigit() else 1
+
+    Label:
+        text: 'Tamanho:'
+    Spinner:
+        text: root.tamanho
+        values: ['infantil', 'normal', 'duplo']
+        on_text: root.tamanho = self.text
+
+    Label:
+        text: 'Valor Total:'
+    TextInput:
+        text: str(root.valor_total)
+        input_filter: 'float'
+        on_text: root.valor_total = float(self.text) if self.text.replace('.', '', 1).isdigit() else 0.0
+
+    Button:
+        text: 'Registrar Pedido'
+        on_press: root.submit_pedido()
+
+<RootWidget>:
+    orientation: 'vertical'
+    ClienteForm:
+        id: cliente_form
+    PedidoForm:
+        id: pedido_form
