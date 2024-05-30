@@ -21,8 +21,9 @@ class ClienteForm(BoxLayout):
         self.add_widget(self.nome_input)
 
         self.add_widget(Label(text='Morada:'))
-        self.morada = TextInput(multiline=False)
-        self.add_widget(self.morada)
+        self.morada_input = TextInput(text=self.morada)
+        self.morada_input.bind(on_text=self.on_morada_text)
+        self.add_widget(self.morada_input)
 
         self.add_widget(Label(text='Telefone:'))
         self.telefone = TextInput(multiline=False)
