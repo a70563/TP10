@@ -2,6 +2,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+import requests
 
 
 class ClienteForm(BoxLayout):
@@ -49,8 +50,19 @@ class ClienteForm(BoxLayout):
         self.telefone = value
 
     def submit_cliente(self, instance):
-        if self.database:
-            self.database.add_cliente(self.nome, self.morada, self.telefone)
+        data = {
+        'nome': self.nome,
+        'morada': self.morada,
+        'telefone': self.telefone
+        }
+        response = requests.post('http://127.0.0.1:5000/clientes', json=data)
+        if response.status_code == 201:
             print(f"Cliente Registrado: Nome: {self.nome}, Morada: {self.morada}, Telefone: {self.telefone}")
+            # Limpar campos do formulário
+            self.nome_input.text = ''
+            self.morada_input.text = ''
+            self.telefone_input.text = ''
         else:
-            print("Database não configurado!")
+            print("Erro ao registrar cliente!")
+            # Exibir mensagem de erro para o usuário
+            # Por exemplo, usando um popup do Kivy

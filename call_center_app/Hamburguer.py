@@ -2,6 +2,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+import requests
 
 
 class HamburguerForm(BoxLayout):
@@ -40,8 +41,17 @@ class HamburguerForm(BoxLayout):
         self.ingredientes = value
 
     def submit_hamburguer(self, instance):
-        if self.database:
-            self.database.add_hamburguer(self.nome_hamburguer, self.ingredientes)
-            print(f"Hambúrguer Adicionado: Nome: {self.nome_hamburguer}, Ingredientes: {self.ingredientes}")
+        data = {
+            'nome_hamburguer': self.nome_hamburguer,
+            'ingredientes': self.ingredientes
+        }
+        response = requests.post('http://127.0.0.1:5000/hamburgueres', json=data)
+        if response.status_code == 201:
+            print(f"Hambúrguer Registrado: Nome: {self.nome_hamburguer}, Ingredientes: {self.ingredientes}")
+            # Limpar campos do formulário
+            self.nome_hamburguer_input.text = ''
+            self.ingredientes_input.text = ''
         else:
-            print("Database não configurado!")
+            print("Erro ao registrar hambúrguer!")
+            # Exibir mensagem de erro para o usuário
+            # Por exemplo, usando um popup do Kivy

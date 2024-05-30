@@ -3,6 +3,7 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.spinner import Spinner
+import requests
 
 class PedidoForm(BoxLayout):
     def __init__(self, **kwargs):
@@ -66,8 +67,28 @@ class PedidoForm(BoxLayout):
         self.valor_total = float(value) if value.replace('.', '', 1).isdigit() else 0.0
 
     def submit_pedido(self, instance):
-        if self.database:
-            self.database.add_pedido(self.id_cliente, self.nome_hamburguer, self.quantidade, self.tamanho, self.valor_total)
+        # Validar os campos antes de enviar a solicitação
+        if not self.id_cliente.isdigit() or not self.nome_hamburguer or self.quantidade <= 0 or self.valor_total <= 0:
+            print("Por favor, preencha todos os campos corretamente.")
+            return
+    
+        data = {
+            'id_cliente': int(self.id_cliente),
+            'nome_hamburguer': self.nome_hamburguer,
+            'quantidade': self.quantidade,
+            'tamanho': self.tamanho,
+            'valor_total': self.valor_total
+        }
+        response = requests.post('http://127.0.0.1:5000/pedidos', json=data)
+        if response.status_code == 201:
             print(f"Pedido Adicionado: Cliente ID: {self.id_cliente}, Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")
+            # Limpar campos do formulário
+            self.id_cliente_input.text = ''
+            self.nome_hamburguer_input.text = ''
+            self.quantidade_input.text = '1'
+            self.tamanho_spinner.text = 'normal'
+            self.valor_total_input.text = '0.0'
         else:
-            print("Database não configurado!")
+            print("Erro ao adicionar pedido!")
+            # Exibir mensagem de erro para o usuário
+            # Por exemplo, usando um popup do Kivy

@@ -45,6 +45,10 @@ class Database:
             INSERT INTO clientes (nome, morada, telefone)
             VALUES (?, ?, ?)
         """, (nome, morada, telefone))
+    
+    def get_all_clientes(self):
+        with self.conn:
+            return self.conn.execute('SELECT * FROM clientes').fetchall()
 
 
     def add_hamburguer(self,nome_hamburguer, ingredientes):
@@ -53,6 +57,10 @@ class Database:
             INSERT INTO hamburgueres (nome_hamburguer, ingredientes)
             VALUES (?, ?)
         """, (nome_hamburguer, ingredientes))
+            
+    def get_all_hamburgueres(self):
+        with self.conn:
+            return self.conn.execute('SELECT * FROM hamburgueres').fetchall()
 
 
     def add_pedido(self,id_cliente, nome_hamburguer, quantidade, tamanho, valor_total):
@@ -61,4 +69,8 @@ class Database:
             INSERT INTO pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, data_hora, valor_total)
             VALUES (?, ?, ?, ?, ?, ?)
         """, (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total))
+            
+    def get_all_pedidos(self):
+        with self.conn:
+            return self.conn.execute('SELECT * FROM pedidos').fetchall()
         
