@@ -7,6 +7,7 @@ from kivy.uix.button import Button
 class ClienteForm(BoxLayout):
     def __init__(self, **kwargs):
         super(ClienteForm, self).__init__(**kwargs)
+        self.database = None
         self.orientation = 'vertical'
         self.padding = 10
         self.spacing = 10
@@ -35,7 +36,9 @@ class ClienteForm(BoxLayout):
         self.add_widget(self.registar_button)
 
 
-
+    def set_database(self, database):
+        self.database = database
+        
     def on_nome_text(self, instance, value):
         self.nome = value
 
@@ -46,5 +49,8 @@ class ClienteForm(BoxLayout):
         self.telefone = value
 
     def submit_cliente(self, instance):
-        self.database.add_cliente(self.nome, self.morada, self.telefone)
-        print(f"Cliente Registrado: Nome: {self.nome}, Morada: {self.morada}, Telefone: {self.telefone}")
+        if self.database:
+            self.database.add_cliente(self.nome, self.morada, self.telefone)
+            print(f"Cliente Registrado: Nome: {self.nome}, Morada: {self.morada}, Telefone: {self.telefone}")
+        else:
+            print("Database não configurado!")

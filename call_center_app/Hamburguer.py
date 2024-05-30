@@ -7,6 +7,7 @@ from kivy.uix.button import Button
 class HamburguerForm(BoxLayout):
     def __init__(self, **kwargs):
         super(HamburguerForm, self).__init__(**kwargs)
+        self.database = None
         self.orientation = 'vertical'
         self.padding = 10
         self.spacing = 10
@@ -29,21 +30,18 @@ class HamburguerForm(BoxLayout):
         self.registar_button.bind(on_press=self.submit_hamburguer)
         self.add_widget(self.registar_button)
 
-    def on_id_cliente_text(self, instance, value):
-        self.id_cliente = value
-
+    def set_database(self, database):
+        self.database = database
+        
     def on_nome_hamburguer_text(self, instance, value):
         self.nome_hamburguer = value
 
-    def on_quantidade_text(self, instance, value):
-        self.quantidade = int(value) if value.isdigit() else 1
+    def on_ingredientes_text(self, instance, value):
+        self.ingredientes = value
 
-    def on_tamanho_text(self, instance, value):
-        self.tamanho = value
-
-    def on_valor_total_text(self, instance, value):
-        self.valor_total = float(value) if value.replace('.', '', 1).isdigit() else 0.0
-
-    def submit_pedido(self, instance):
-        self.database.add_pedido(self.id_cliente, self.nome_hamburguer, self.quantidade, self.tamanho, self.valor_total)
-        print(f"Pedido Registrado: Cliente ID: {self.id_cliente}, Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")
+    def submit_hamburguer(self, instance):
+        if self.database:
+            self.database.add_hamburguer(self.nome_hamburguer, self.ingredientes)
+            print(f"Hambúrguer Adicionado: Nome: {self.nome_hamburguer}, Ingredientes: {self.ingredientes}")
+        else:
+            print("Database não configurado!")

@@ -7,6 +7,7 @@ from kivy.uix.spinner import Spinner
 class PedidoForm(BoxLayout):
     def __init__(self, **kwargs):
         super(PedidoForm, self).__init__(**kwargs)
+        self.database = None
         self.orientation = 'vertical'
         self.padding = 10
         self.spacing = 10
@@ -46,6 +47,9 @@ class PedidoForm(BoxLayout):
         self.registar_button.bind(on_press=self.submit_pedido)
         self.add_widget(self.registar_button)
         
+    def set_database(self, database):
+        self.database = database
+        
     def on_id_cliente_text(self, instance, value):
         self.id_cliente = value
 
@@ -62,5 +66,8 @@ class PedidoForm(BoxLayout):
         self.valor_total = float(value) if value.replace('.', '', 1).isdigit() else 0.0
 
     def submit_pedido(self, instance):
-        self.database.add_pedido(self.id_cliente, self.nome_hamburguer, self.quantidade, self.tamanho, self.valor_total)
-        print(f"Pedido Adicionado: Cliente ID: {self.id_cliente}, Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")
+        if self.database:
+            self.database.add_pedido(self.id_cliente, self.nome_hamburguer, self.quantidade, self.tamanho, self.valor_total)
+            print(f"Pedido Adicionado: Cliente ID: {self.id_cliente}, Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")
+        else:
+            print("Database não configurado!")
