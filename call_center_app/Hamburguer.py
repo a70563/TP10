@@ -7,12 +7,20 @@ import requests
            
 class HamburguerForm(BoxLayout):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(HamburguerForm, self).__init__(**kwargs)
         self.orientation = 'vertical'
+        self.padding = 10
+        self.spacing = 10
+
+        self.nome_hamburguer = ''
+        self.quantidade = 1
+        self.tamanho = 'normal'
+        self.valor_total = 0.0
 
         self.add_widget(Label(text='Nome do Hambúrguer:'))
-        self.nome_hamburguer = TextInput(multiline=False)
-        self.add_widget(self.nome_hamburguer)
+        self.nome_hamburguer_input = TextInput(text=self.nome_hamburguer)
+        self.nome_hamburguer_input.bind(on_text=self.on_nome_hamburguer_text)
+        self.add_widget(self.nome_hamburguer_input)
 
         self.add_widget(Label(text='Ingredientes:'))
         self.ingredientes = TextInput(multiline=False)

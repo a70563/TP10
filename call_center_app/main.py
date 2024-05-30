@@ -1,8 +1,8 @@
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from Cliente import ClienteForm
-from Hamburguer import HamburguerForm
-from Pedido import PedidoForm
+from call_center_app.Cliente import ClienteForm
+from call_center_app.Hamburguer import HamburguerForm
+from call_center_app.Pedido import PedidoForm
 
 
         
