@@ -29,6 +29,9 @@ class HamburguerForm(BoxLayout):
         self.registar_button.bind(on_press=self.submit_hamburguer)
         self.add_widget(self.registar_button)
 
+    def on_id_cliente_text(self, instance, value):
+        self.id_cliente = value
+
     def on_nome_hamburguer_text(self, instance, value):
         self.nome_hamburguer = value
 
@@ -42,4 +45,5 @@ class HamburguerForm(BoxLayout):
         self.valor_total = float(value) if value.replace('.', '', 1).isdigit() else 0.0
 
     def submit_pedido(self, instance):
-        print(f"Pedido Registado: Hambúrguer: {self.nome_hamburguer}, Ingredientes: {self.ingredientes}")
+        self.database.add_pedido(self.id_cliente, self.nome_hamburguer, self.quantidade, self.tamanho, self.valor_total)
+        print(f"Pedido Registrado: Cliente ID: {self.id_cliente}, Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")

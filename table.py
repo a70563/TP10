@@ -1,10 +1,13 @@
 import sqlite3
 
+class Database:
+    def __init__(self, db_name='call_center.db'):
+        self.conn = sqlite3.connect(db_name)
+        self.create_tables()
 
-def create_tables():
-        conn = sqlite3.connect('callcenter.db')
-        cursor = conn.cursor()
-        cursor.execute("""
+    def create_tables(self):
+        with self.conn:
+            self.conn.execute("""
             CREATE TABLE IF NOT EXISTS clientes (
                 id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome TEXT NOT NULL,
@@ -13,14 +16,14 @@ def create_tables():
             )
         """)
             
-        cursor.execute("""
+            self.conn.execute("""
             CREATE TABLE IF NOT EXISTS hamburgueres (
                 nome_hamburguer TEXT PRIMARY KEY,
                 ingredientes TEXT NOT NULL
             );
         """)
             
-        cursor.execute("""
+            self.conn.execute("""
             CREATE TABLE IF NOT EXISTS pedidos (
                 id_pedido INTEGER PRIMARY KEY AUTOINCREMENT,
                 id_cliente INTEGER,
@@ -33,9 +36,6 @@ def create_tables():
                 FOREIGN KEY (nome_hamburguer) REFERENCES hamburgueres(nome_hamburguer)
             );
         """)
-        
-        conn.commit()
-        conn.close()
 
 
 

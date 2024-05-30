@@ -36,17 +36,15 @@ class ClienteForm(BoxLayout):
 
 
 
-    def on_nome_hamburguer_text(self, instance, value):
-        self.nome_hamburguer = value
+    def on_nome_text(self, instance, value):
+        self.nome = value
 
-    def on_quantidade_text(self, instance, value):
-        self.quantidade = int(value) if value.isdigit() else 1
+    def on_morada_text(self, instance, value):
+        self.morada = value
 
-    def on_tamanho_text(self, instance, value):
-        self.tamanho = value
+    def on_telefone_text(self, instance, value):
+        self.telefone = value
 
-    def on_valor_total_text(self, instance, value):
-        self.valor_total = float(value) if value.replace('.', '', 1).isdigit() else 0.0
-
-    def submit_pedido(self, instance):
-        print(f"Pedido Registrado: Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")
+    def submit_cliente(self, instance):
+        self.database.add_cliente(self.nome, self.morada, self.telefone)
+        print(f"Cliente Registrado: Nome: {self.nome}, Morada: {self.morada}, Telefone: {self.telefone}")

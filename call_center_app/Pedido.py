@@ -1,8 +1,8 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.checkbox import CheckBox
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.spinner import Spinner
 
 class PedidoForm(BoxLayout):
     def __init__(self, **kwargs):
@@ -28,56 +28,39 @@ class PedidoForm(BoxLayout):
         self.add_widget(self.nome_hamburguer_input)
         
         self.add_widget(Label(text='Quantidade'))
-        self.quantidade = TextInput(multiline=False)
-        self.add_widget(self.quantidade)
+        self.quantidade_input = TextInput(text=str(self.quantidade), input_filter='int')
+        self.quantidade_input.bind(text=self.on_quantidade_text)
+        self.add_widget(self.quantidade_input)
         
-        self.add_widget(Label(text='Tamanho (infantil, normal, duplo)'))
-        self.tamanho_layout = BoxLayout(orientation='horizontal')
-        self.tamanho_infantil = CheckBox(group='tamanho')
-        self.tamanho_normal = CheckBox(group='tamanho')
-        self.tamanho_duplo = CheckBox(group='tamanho')
-        
-        self.tamanho_layout.add_widget(Label(text='Infantil')) 
-        self.tamanho_layout.add_widget(self.tamanho_infantil) 
-        self.tamanho_layout.add_widget(Label(text='Normal'))
-        self.tamanho_layout.add_widget(self.tamanho_normal)
-        self.tamanho_layout.add_widget(Label(text='Duplo'))
-        self.tamanho_layout.add_widget(self.tamanho_duplo)
-        self.add_widget(self.tamanho_layout)
-        
+        self.add_widget(Label(text='Tamanho:'))
+        self.tamanho_spinner = Spinner(text=self.tamanho, values=['infantil', 'normal', 'duplo'])
+        self.tamanho_spinner.bind(text=self.on_tamanho_text)
+        self.add_widget(self.tamanho_spinner)
         
         self.add_widget(Label(text='Valor Total'))
-        self.valor_total = TextInput(multiline=False)
-        self.add_widget(self.valor_total)
+        self.valor_total_input = TextInput(text=str(self.valor_total), input_filter='float')
+        self.valor_total_input.bind(text=self.on_valor_total_text)
+        self.add_widget(self.valor_total_input)
         
-        self.submit_button = Button(text='Adicionar Pedido')
-        self.submit_button.bind(on_press=self.add_pedido)
-        self.add_widget(self.submit_button)
+        self.registar_button = Button(text='Adicionar Pedido')
+        self.registar_button.bind(on_press=self.submit_pedido)
+        self.add_widget(self.registar_button)
         
-        self.result_label = Label(text='')
-        self.add_widget(self.result_label)
+    def on_id_cliente_text(self, instance, value):
+        self.id_cliente = value
 
-    def get_tamanho(self):
-        if self.tamanho_infantil.active:
-            return 'infantil'
-        elif self.tamanho_normal.active:
-            return 'normal'
-        elif self.tamanho_duplo.active:
-            return 'duplo'
-        return ''
-        
+    def on_nome_hamburguer_text(self, instance, value):
+        self.nome_hamburguer = value
 
-    def add_pedido(self):
-        url = 'http://127.0.0.1:5000/pedidos'
-        pedido_data = {
-            'id_cliente': self.id_cliente.text,
-            'nome_hamburguer': self.nome_hamburguer.text,
-            'quantidade': self.quantidade.text,
-            'tamanho': self.get_tamanho(),
-            'valor_total': self.valor_total.text
-        }
-        response = requests.post(url, json=pedido_data)
-        if response.status_code == 201:
-            self.result_label.text = 'Pedido adicionado com sucesso!'
-        else:
-            self.result_label.text = 'Erro ao adicionar pedido!'
+    def on_quantidade_text(self, instance, value):
+        self.quantidade = int(value) if value.isdigit() else 1
+
+    def on_tamanho_text(self, instance, value):
+        self.tamanho = value
+
+    def on_valor_total_text(self, instance, value):
+        self.valor_total = float(value) if value.replace('.', '', 1).isdigit() else 0.0
+
+    def submit_pedido(self, instance):
+        self.database.add_pedido(self.id_cliente, self.nome_hamburguer, self.quantidade, self.tamanho, self.valor_total)
+        print(f"Pedido Adicionado: Cliente ID: {self.id_cliente}, Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")
