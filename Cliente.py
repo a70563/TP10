@@ -2,16 +2,23 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-import requests
+
 
 class ClienteForm(BoxLayout):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(ClienteForm, self).__init__(**kwargs)
         self.orientation = 'vertical'
+        self.padding = 10
+        self.spacing = 10
+
+        self.nome = ''
+        self.morada = ''
+        self.telefone = ''
         
-        self.add_widget(Label(text='Nome:'))
-        self.nome = TextInput(multiline=False)
-        self.add_widget(self.nome)
+        self.add_widget(Label(text='Nome Cliente:'))
+        self.nome_input = TextInput(text=self.nome)
+        self.nome_input.bind(on_text=self.on_nome_text)
+        self.add_widget(self.nome_input)
 
         self.add_widget(Label(text='Morada:'))
         self.morada = TextInput(multiline=False)
