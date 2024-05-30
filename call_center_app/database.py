@@ -39,32 +39,26 @@ class Database:
 
 
 
-def add_cliente(nome, morada, telefone):
-        conn = sqlite3.connect('callcenter.db')
-        cursor = conn.cursor()
-        cursor.execute("""
+    def add_cliente(self,nome, morada, telefone):   
+        with self.conn:
+            self.conn.execute("""
             INSERT INTO clientes (nome, morada, telefone)
             VALUES (?, ?, ?)
         """, (nome, morada, telefone))
-        conn.commit()
-        conn.close()
 
-def add_hamburguer(nome_hamburguer, ingredientes):
-        conn = sqlite3.connect('callcenter.db')
-        cursor = conn.cursor()
-        cursor.execute("""
+
+    def add_hamburguer(self,nome_hamburguer, ingredientes):
+        with self.conn:
+            self.conn.execute("""
             INSERT INTO hamburgueres (nome_hamburguer, ingredientes)
             VALUES (?, ?)
         """, (nome_hamburguer, ingredientes))
-        conn.commit()
-        conn.close()
 
-def add_pedido(id_cliente, nome_hamburguer, quantidade, tamanho, valor_total):
-        conn = sqlite3.connect('callcenter.db')
-        cursor = conn.cursor()
-        cursor.execute("""
+
+    def add_pedido(self,id_cliente, nome_hamburguer, quantidade, tamanho, valor_total):
+        with self.conn:
+            self.conn.execute("""
             INSERT INTO pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, data_hora, valor_total)
             VALUES (?, ?, ?, ?, ?, ?)
         """, (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total))
-        conn.commit()
-        conn.close()
+        
