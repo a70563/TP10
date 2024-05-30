@@ -1,7 +1,6 @@
 import sqlite3
 
 
-
 def create_tables():
         conn = sqlite3.connect('callcenter.db')
         cursor = conn.cursor()
