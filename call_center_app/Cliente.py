@@ -30,9 +30,9 @@ class ClienteForm(BoxLayout):
         self.telefone_input.bind(on_text=self.on_telefone_text)
         self.add_widget(self.telefone_input)
 
-        self.registrar_button = Button(text='Adicionar Cliente')
-        self.registrar_button.bind(on_press=self.submit_cliente)
-        self.add_widget(self.registrar_button)
+        self.registar_button = Button(text='Adicionar Cliente')
+        self.registar_button.bind(on_press=self.submit_cliente)
+        self.add_widget(self.registar_button)
 
 
 
