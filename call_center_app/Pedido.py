@@ -3,16 +3,24 @@ from kivy.uix.label import Label
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-import requests
 
 class PedidoForm(BoxLayout):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(PedidoForm, self).__init__(**kwargs)
         self.orientation = 'vertical'
+        self.padding = 10
+        self.spacing = 10
+
+        self.id_cliente = ''
+        self.nome_hamburguer = ''
+        self.quantidade = 1
+        self.tamanho = 'normal'
+        self.valor_total = 0.0
         
         self.add_widget(Label(text='ID do Cliente'))
-        self.id_cliente = TextInput(multiline=False)
-        self.add_widget(self.id_cliente)
+        self.id_cliente_input = TextInput(text=self.id_cliente)
+        self.id_cliente_input.bind(text=self.on_id_cliente_text)
+        self.add_widget(self.id_cliente_input)
         
         self.add_widget(Label(text='Nome do Hambúrguer'))
         self.nome_hamburguer = TextInput(multiline=False)
