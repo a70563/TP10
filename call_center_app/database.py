@@ -1,29 +1,26 @@
 import sqlite3
 
 class Database:
-    def __init__(self, db_name='call_center.db'):
-        self.conn = sqlite3.connect(db_name)
-        self.create_tables()
-
-    def create_tables(self):
-        with self.conn:
-            self.conn.execute("""
+    def create_tables():
+        conn = sqlite3.connect('call_center.db')
+        cursor = conn.cursor()
+        cursor.execute('''
             CREATE TABLE IF NOT EXISTS clientes (
                 id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome TEXT NOT NULL,
                 morada TEXT,
                 telefone TEXT NOT NULL
             )
-        """)
-            
-            self.conn.execute("""
+        ''')
+                
+        cursor.execute('''
             CREATE TABLE IF NOT EXISTS hamburgueres (
                 nome_hamburguer TEXT PRIMARY KEY,
                 ingredientes TEXT NOT NULL
-            );
-        """)
-            
-            self.conn.execute("""
+                )
+        ''')
+                
+        cursor.execute('''
             CREATE TABLE IF NOT EXISTS pedidos (
                 id_pedido INTEGER PRIMARY KEY AUTOINCREMENT,
                 id_cliente INTEGER,
@@ -34,43 +31,33 @@ class Database:
                 valor_total REAL NOT NULL,
                 FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
                 FOREIGN KEY (nome_hamburguer) REFERENCES hamburgueres(nome_hamburguer)
-            );
-        """)
+                )
+        ''')
 
 
 
-    def add_cliente(self,nome, morada, telefone):   
-        with self.conn:
-            self.conn.execute("""
-            INSERT INTO clientes (nome, morada, telefone)
-            VALUES (?, ?, ?)
-        """, (nome, morada, telefone))
-    
-    def get_all_clientes(self):
-        with self.conn:
-            return self.conn.execute('SELECT * FROM clientes').fetchall()
+            # Criação de clientes
+        cursor.execute('''
+            INSERT INTO clientes (nome, morada, telefone) VALUES
+            ('Joao', 'Rua Eça de Queiroz, 0', '923432234),
+            ('Joana', 'Quinta Flor, 19', '923534535')
+        ''')
 
+            # Criação de hamburgueres
+        cursor.execute('''
+            INSERT INTO hamburgueres (nome_hamburguer, ingredientes) VALUES
+            ('Hamburguer Super', 'Tomate, alface, queijo'),
+            ('Hamburguer Mini', 'Tomate, queijo')
+        ''')
 
-    def add_hamburguer(self,nome_hamburguer, ingredientes):
-        with self.conn:
-            self.conn.execute("""
-            INSERT INTO hamburgueres (nome_hamburguer, ingredientes)
-            VALUES (?, ?)
-        """, (nome_hamburguer, ingredientes))
+            # Inserção de pedidos
+        cursor.execute('''
+            INSERT INTO pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, data_hora, valor_total) VALUES
+            (1, 'Hamburguer Super', 2, 'normal', '2024-02-24 10:31:40', 45.50),
+            (2, 'Hamburguer Mini', 1, 'duplo', '2024-09-01 13:12:02', 23.00)
+        ''')
             
-    def get_all_hamburgueres(self):
-        with self.conn:
-            return self.conn.execute('SELECT * FROM hamburgueres').fetchall()
-
-
-    def add_pedido(self,id_cliente, nome_hamburguer, quantidade, tamanho, valor_total):
-        with self.conn:
-            self.conn.execute("""
-            INSERT INTO pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, data_hora, valor_total)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total))
-            
-    def get_all_pedidos(self):
-        with self.conn:
-            return self.conn.execute('SELECT * FROM pedidos').fetchall()
+        conn.commit()
+        conn.close()
+        
         
