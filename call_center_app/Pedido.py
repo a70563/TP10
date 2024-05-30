@@ -23,8 +23,9 @@ class PedidoForm(BoxLayout):
         self.add_widget(self.id_cliente_input)
         
         self.add_widget(Label(text='Nome do Hambúrguer'))
-        self.nome_hamburguer = TextInput(multiline=False)
-        self.add_widget(self.nome_hamburguer)
+        self.nome_hamburguer_input = TextInput(text=self.nome_hamburguer)
+        self.nome_hamburguer_input.bind(text=self.on_nome_hamburguer_text)
+        self.add_widget(self.nome_hamburguer_input)
         
         self.add_widget(Label(text='Quantidade'))
         self.quantidade = TextInput(multiline=False)
