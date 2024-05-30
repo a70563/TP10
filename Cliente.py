@@ -30,23 +30,23 @@ class ClienteForm(BoxLayout):
         self.telefone_input.bind(on_text=self.on_telefone_text)
         self.add_widget(self.telefone_input)
 
-        self.submit_button = Button(text='Adicionar Cliente')
-        self.submit_button.bind(on_press=self.add_cliente)
-        self.add_widget(self.submit_button)
+        self.registrar_button = Button(text='Adicionar Cliente')
+        self.registrar_button.bind(on_press=self.submit_cliente)
+        self.add_widget(self.registrar_button)
 
-        self.result_label = Label(text='')
-        self.add_widget(self.result_label)
-        
 
-    def add_cliente(self):
-        url = 'http://127.0.0.1:5000/clientes'
-        cliente_data = {
-            'nome': self.nome.text,
-            'morada': self.morada.text,
-            'telefone': self.telefone.text
-        }
-        response = requests.post(url, json=cliente_data)
-        if response.status_code == 201:
-            self.result_label.text = 'Cliente adicionado com sucesso!'
-        else:
-            self.result_label.text = 'Erro ao adicionar cliente!'
+
+    def on_nome_hamburguer_text(self, instance, value):
+        self.nome_hamburguer = value
+
+    def on_quantidade_text(self, instance, value):
+        self.quantidade = int(value) if value.isdigit() else 1
+
+    def on_tamanho_text(self, instance, value):
+        self.tamanho = value
+
+    def on_valor_total_text(self, instance, value):
+        self.valor_total = float(value) if value.replace('.', '', 1).isdigit() else 0.0
+
+    def submit_pedido(self, instance):
+        print(f"Pedido Registrado: Hambúrguer: {self.nome_hamburguer}, Quantidade: {self.quantidade}, Tamanho: {self.tamanho}, Valor Total: {self.valor_total}")
