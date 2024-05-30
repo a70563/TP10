@@ -26,8 +26,9 @@ class ClienteForm(BoxLayout):
         self.add_widget(self.morada_input)
 
         self.add_widget(Label(text='Telefone:'))
-        self.telefone = TextInput(multiline=False)
-        self.add_widget(self.telefone)
+        self.telefone_input = TextInput(text=self.telefone)
+        self.telefone_input.bind(on_text=self.on_telefone_text)
+        self.add_widget(self.telefone_input)
 
         self.submit_button = Button(text='Adicionar Cliente')
         self.submit_button.bind(on_press=self.add_cliente)
