@@ -4,18 +4,10 @@
 
 App Call Center feita para realizar registos de pedidos, clientes e hamburgueres de um restaurante, utilizando um banco de base de dados.
 
-## Utilização
-
-Esta aplicação tem:
-
-**Servidor Web**: Responsável por intermediar as acções entre App e Banco de Dados.
-**Banco de Dados**: Armazena informações sobre os pedidos, hamburgueres, utilizadores e métricas de vendas.
-**Aplicação Kivy**: Interface local para os funcionários do Siri Cascudo gerenciarem as operações do call center de maneira eficiente.
 
 ## Estrutura do TP10
 
 Para este projeto foram feitos vários ficheiros para ser possivel a sua execução, sendo eles:
-
 
 ```
 app.py
