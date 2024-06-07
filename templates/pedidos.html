@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h2 class="mt-4">Clientes </h2>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Morada</th>
+            <th>Telefone</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for clientes in call_center %}
+        <tr>
+            <td>{{ clientes.id_cliente }}</td>
+            <td>{{ clientes.nome }}</td>
+            <td>{{ clientes.morada }}</td>
+            <td>{{ clientes.telefone }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

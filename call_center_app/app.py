@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 import sqlite3
 
 app = Flask(__name__)
@@ -28,6 +28,18 @@ def post_cliente():
     conn.close()
     return jsonify({'message': 'Cliente added successfully'}), 201
 
+@app.route('/clientes/<int:cliente_id>', methods=['PUT'])
+def put_cliente(cliente_id):
+    data = request.get_json()
+    nome = data['nome']
+    morada = data['morada']
+    telefone = data['telefone']
+    conn = get_db_connection()
+    conn.execute('UPDATE clientes SET nome = ?, morada = ?, telefone = ? WHERE id = ?', (nome, morada, telefone, cliente_id))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Cliente updated successfully'}), 200
+
 @app.route('/hamburgueres', methods=['GET'])
 def get_hamburgueres():
     conn = get_db_connection()
@@ -36,7 +48,7 @@ def get_hamburgueres():
     return jsonify([dict(row) for row in hamburgueres]), 200
 
 @app.route('/hamburgueres', methods=['POST'])
-def post_hamburguer():
+def post_hamburgueres():
     data = request.get_json()
     nome_hamburguer = data['nome_hamburguer']
     ingredientes = data['ingredientes']
@@ -46,6 +58,17 @@ def post_hamburguer():
     conn.close()
     return jsonify({'message': 'Hambúrguer added successfully'}), 201
 
+@app.route('/hamburgueres/<int:hamburguer_id>', methods=['PUT'])
+def put_hamburgueres(hamburguer_id):
+    data = request.get_json()
+    nome_hamburguer = data['nome_hamburguer']
+    ingredientes = data['ingredientes']
+    conn = get_db_connection()
+    conn.execute('UPDATE hamburgueres SET nome_hamburguer = ?, ingredientes = ? WHERE id = ?', (nome_hamburguer, ingredientes, hamburguer_id))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Hambúrguer updated successfully'}), 200
+
 @app.route('/pedidos', methods=['GET'])
 def get_pedidos():
     conn = get_db_connection()
@@ -54,7 +77,7 @@ def get_pedidos():
     return jsonify([dict(row) for row in pedidos]), 200
 
 @app.route('/pedidos', methods=['POST'])
-def post_pedido():
+def post_pedidos():
     data = request.get_json()
     id_cliente = data['id_cliente']
     nome_hamburguer = data['nome_hamburguer']
@@ -65,16 +88,23 @@ def post_pedido():
     conn.execute('INSERT INTO pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total) VALUES (?, ?, ?, ?, ?)', (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total))
     conn.commit()
     conn.close()
-    return jsonify({'message': 'Pedido added successfully'}), 201
+    return jsonify({'message': 'O seu pedido foi adicionado com sucesso'}), 201
 
-@app.route('/')
-def index():
+@app.route('/pedidos/<int:pedido_id>', methods=['PUT'])
+def put_pedidos(pedido_id):
+    data = request.get_json()
+    id_cliente = data['id_cliente']
+    nome_hamburguer = data['nome_hamburguer']
+    quantidade = data['quantidade']
+    tamanho = data['tamanho']
+    valor_total = data['valor_total']
     conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM pedidos")
-    pedidos = cursor.fetchall()
+    conn.execute('UPDATE pedidos SET id_cliente = ?, nome_hamburguer = ?, quantidade = ?, tamanho = ?, valor_total = ? WHERE id_pedido = ?', (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total, pedido_id))
+    conn.commit()
     conn.close()
-    return render_template("pedidos.html", pedidos=pedidos)
+    return jsonify({'message': 'Pedido atualizado com sucesso'}), 200
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
